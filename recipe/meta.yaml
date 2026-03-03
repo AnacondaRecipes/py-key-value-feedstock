@@ -18,7 +18,8 @@ build:
 
 outputs:
   - name: py-key-value-shared
-    script: build_shared.sh
+    script: build_shared.sh  # [not win]
+    script: build_shared.bat  # [win]
     requirements:
       host:
         - python
@@ -40,7 +41,8 @@ outputs:
         - pip check
 
   - name: py-key-value-aio
-    script: build_aio.sh
+    script: build_aio.sh  # [not win]
+    script: build_aio.bat  # [win]
     requirements:
       host:
         - python
