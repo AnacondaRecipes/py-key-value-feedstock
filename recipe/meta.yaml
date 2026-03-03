@@ -112,6 +112,10 @@ about:
   license_file: LICENSE
   license_family: Apache
   summary: Shared Key-Value, A pluggable interface for KV Stores
+  description: |
+    This library provides a pluggable interface for key-value
+    stores with support for multiple backends, TTL handling,
+    type safety, and extensible wrappers.
   home: https://github.com/strawgate/py-key-value
   dev_url: https://github.com/strawgate/py-key-value
-  doc_url: https://github.com/strawgate/py-key-value/blob/main/README.md
+  doc_url: https://strawgate.com/py-key-value/
