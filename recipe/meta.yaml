@@ -119,3 +119,7 @@ about:
   home: https://github.com/strawgate/py-key-value
   dev_url: https://github.com/strawgate/py-key-value
   doc_url: https://strawgate.com/py-key-value/
+
+extra:
+  recipe-maintainers:
+    - viridianmelody
