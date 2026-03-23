@@ -1,2 +1,0 @@
-cd py-key-value-aio
-$PYTHON -m pip install . -vv --no-deps --no-build-isolation --disable-pip-version-check
