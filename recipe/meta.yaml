@@ -60,7 +60,7 @@ requirements:
     # py-key-value-aio[wrappers-encryption]
     - cryptography >=45.0.0
     # py-key-value-aio[duckdb]
-    - duckdb >=1.1.1
+    - python-duckdb >=1.1.1
     - pytz >=2025.2
     # py-key-value-aio[dynamodb]
     - asyncpg >=0.30.0
