@@ -30,6 +30,9 @@ requirements:
     # py-key-value-aio[disk]
     - diskcache >=5.0.0
     - pathvalidate >=3.3.1
+    # filetree
+    - aiofile >=3.5.0
+    - anyio >=4.4.0
     # py-key-value-aio[redis]
     - redis-py >=4.3.0
     # py-key-value-aio[mongodb]
