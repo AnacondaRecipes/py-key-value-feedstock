@@ -31,7 +31,9 @@ requirements:
     - diskcache >=5.0.0
     - pathvalidate >=3.3.1
     # filetree
-    - aiofile >=3.5.0
+    # while upstream states aiofile>=3.5.0, the actual aiofile functionality in use was introduced in 3.9.0.
+    # pinning min to 3.9.0 instead of a later version based on 'uv.lock' evidence.
+    - aiofile >=3.9.0
     - anyio >=4.4.0
     # py-key-value-aio[redis]
     - redis-py >=4.3.0
