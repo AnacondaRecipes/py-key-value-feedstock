@@ -81,6 +81,7 @@ test:
     - pip
   commands:
     - pip check
+    - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
 
 about:
   license: Apache-2.0
