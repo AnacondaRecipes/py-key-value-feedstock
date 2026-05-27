@@ -6,8 +6,8 @@ package:
   version: {{ version }}
 
 source:
-  - url: https://pypi.org/packages/source/{{ name[0] }}/py_key_value_aio/py_key_value_aio-{{ version }}.tar.gz
-    sha256: e3012e6243ed7cc09bb05457bd4d03b1ba5c2b1ca8700096b3927db79ffbbe55
+  - url: https://github.com/strawgate/py-key-value/archive/refs/tags/{{ version }}.tar.gz
+    sha256: 1b3588c7d02e1803ca0bbe43d93773e3d2c1396137f08a884bf241020d2b6630
 
 build:
   number: 1
@@ -71,7 +71,28 @@ requirements:
     # py-key-value-aio[dynamodb]
     - asyncpg >=0.30.0
 
+{% set skip_tests = "" %}
+
+# tests missing various dependencies
+{% set skip_tests = skip_tests + " --ignore=tests/stores/aerospike/test_aerospike.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/dynamodb/test_dynamodb.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/elasticsearch/test_elasticsearch.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/firestore/test_firestore.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/keyring/test_keyring.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/memcached/test_memcached.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/mongodb/test_mongodb.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/opensearch/test_opensearch.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/postgresql/test_postgresql.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/redis/test_redis.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/rocksdb/test_rocksdb.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/s3/test_s3.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/valkey/test_valkey.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/vault/test_vault.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/valkey/test_valkey_cluster.py" %}
+
 test:
+  source_files:
+    - tests
   imports:
     - key_value
     - key_value.shared
@@ -79,9 +100,26 @@ test:
     - key_value.aio.stores.base
   requires:
     - pip
+    - pytest >=8.4.2,<9 # maxbound: pytest versions 9 and above cause issues with the tests
+    - pytest-asyncio >=1.2.0
+    - inline-snapshot >=0.30.1
+    - dirty-equals >=0.10.0
+    # optional dependencies required for test
+    - cachetools
+    - pydantic
+    - python-duckdb
+    - aiofile
+    - anyio
+    - cryptography
+    - diskcache
+    - pathvalidate
+    - elasticsearch
+    - redis-py
+    - pytz
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
+    - pytest -vv --asyncio-mode=auto {{ skip_tests }} tests
 
 about:
   license: Apache-2.0
