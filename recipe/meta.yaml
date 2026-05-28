@@ -91,7 +91,7 @@ requirements:
 {% set skip_tests = skip_tests + " --ignore=tests/stores/valkey/test_valkey_cluster.py" %}
 
 {% set raise_fd_limit = "" %}
-# On OSX CI - OSError: [Errno 24] Too many open files
+# increase the fd limit on OSX CI for tests - OSError: [Errno 24] Too many open files
 {% set raise_fd_limit = "ulimit -n 4096 && " %}  # [osx]
 
 test:
