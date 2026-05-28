@@ -92,7 +92,7 @@ requirements:
 
 {% set raise_fd_limit = "" %}
 # On OSX CI - OSError: [Errno 24] Too many open files
-{% set raise_fd_limit = "ulimit -n 4096 & " %}  # [osx]
+{% set raise_fd_limit = "ulimit -n 4096 && " %}  # [osx]
 
 test:
   source_files:
@@ -123,7 +123,6 @@ test:
   commands:
     - pip check
     - python -c "from importlib.metadata import version; assert(version('{{ name }}')=='{{ version }}')"
-
     - {{ raise_fd_limit }} pytest -vv --asyncio-mode=auto {{ skip_tests }} tests
 
 about:
