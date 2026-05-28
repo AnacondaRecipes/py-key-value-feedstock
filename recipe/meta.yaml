@@ -31,8 +31,9 @@ requirements:
     - diskcache >=5.0.0
     - pathvalidate >=3.3.1
     # filetree
-    # while upstream states aiofile>=3.5.0, the actual aiofile functionality in use was introduced in 3.9.0.
-    # pinning min to 3.9.0 instead of a later version based on 'uv.lock' evidence.
+    # while upstream states aiofile>=3.5.0, actual aiofile functionality flush() used by the package was introduced
+    # in 3.9.0. pinning min to 3.9.0 instead of a later version based on 'uv.lock' evidence.
+    # reference: https://github.com/strawgate/py-key-value/blob/0.4.4/src/key_value/aio/stores/filetree/store.py#L157
     - aiofile >=3.9.0
     - anyio >=4.4.0
     # py-key-value-aio[redis]
