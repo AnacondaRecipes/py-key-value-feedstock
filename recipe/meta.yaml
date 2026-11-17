@@ -1,16 +1,36 @@
 {% set name = "py-key-value-aio" %}
-{% set version = "0.4.4" %}
+{% set version = "0.4.6" %}
+{% set skip_tests = "" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/aerospike/test_aerospike.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/dynamodb/test_dynamodb.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/elasticsearch/test_elasticsearch.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/firestore/test_firestore.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/keyring/test_keyring.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/memcached/test_memcached.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/mongodb/test_mongodb.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/opensearch/test_opensearch.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/postgresql/test_postgresql.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/redis/test_redis.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/rocksdb/test_rocksdb.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/s3/test_s3.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/valkey/test_valkey.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/vault/test_vault.py" %}
+{% set skip_tests = skip_tests + " --ignore=tests/stores/valkey/test_valkey_cluster.py" %}
+{% set raise_fd_limit = "" %}
+{% set raise_fd_limit = "ulimit -n 4096 && " %}  # [osx]
 
+# tests missing various dependencies
+# increase the fd limit on OSX CI for tests - OSError: [Errno 24] Too many open files
 package:
   name: {{ name }}
   version: {{ version }}
 
 source:
   - url: https://github.com/strawgate/py-key-value/archive/refs/tags/{{ version }}.tar.gz
-    sha256: 1b3588c7d02e1803ca0bbe43d93773e3d2c1396137f08a884bf241020d2b6630
+    sha256: c71f99d60efd6d2dc79c6e954968a19889dd3f4471e80978c273bf00ae631609
 
 build:
-  number: 1
+  number: 0
   skip: true  # [py<310]
   script: {{ PYTHON }} -m pip install . -vv --no-build-isolation --no-deps
 
@@ -19,9 +39,10 @@ requirements:
     - python
     - uv-build >=0.8.2,<0.9.0
     - pip
+    - uv_build >=0.11.4,<0.12
   run:
     - python
-    - beartype >=0.20.2
+    - beartype >=0.20.0
     - typing_extensions >=4.15.0
   run_constrained:
     # [project.optional-dependencies.standard]
@@ -39,7 +60,7 @@ requirements:
     # py-key-value-aio[redis]
     - redis-py >=4.3.0
     # py-key-value-aio[mongodb]
-    - pymongo >=4.0.0
+    - pymongo >=4.9.0
     # py-key-value-aio[valkey]
     - valkey-glide >=2.1.0
     # py-key-value-aio[vault]
@@ -49,7 +70,7 @@ requirements:
     - aiomcache >=0.8.0
     # py-key-value-aio[elasticsearch]
     - elasticsearch >=8.0.0
-    - aiohttp>=3.12
+    - aiohttp >=3.12
     # py-key-value-aio[dynamodb]
     - aioboto3 >=13.3.0
     - types-aiobotocore-dynamodb >=2.16.0
@@ -71,29 +92,13 @@ requirements:
     - pytz >=2025.2
     # py-key-value-aio[dynamodb]
     - asyncpg >=0.30.0
-
-{% set skip_tests = "" %}
-
-# tests missing various dependencies
-{% set skip_tests = skip_tests + " --ignore=tests/stores/aerospike/test_aerospike.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/dynamodb/test_dynamodb.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/elasticsearch/test_elasticsearch.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/firestore/test_firestore.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/keyring/test_keyring.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/memcached/test_memcached.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/mongodb/test_mongodb.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/opensearch/test_opensearch.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/postgresql/test_postgresql.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/redis/test_redis.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/rocksdb/test_rocksdb.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/s3/test_s3.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/valkey/test_valkey.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/vault/test_vault.py" %}
-{% set skip_tests = skip_tests + " --ignore=tests/stores/valkey/test_valkey_cluster.py" %}
-
-{% set raise_fd_limit = "" %}
-# increase the fd limit on OSX CI for tests - OSError: [Errno 24] Too many open files
-{% set raise_fd_limit = "ulimit -n 4096 && " %}  # [osx]
+    - aerospike >=16.0.0
+    - azure-data-tables >=12.4.0
+    - azure-core >=1.29.0
+    - chdb >=4.1.1
+    - google-cloud-firestore >=2.13.0
+    - google-auth >=2.24.0
+    - opensearch-py >=2.0.0
 
 test:
   source_files:
@@ -105,7 +110,7 @@ test:
     - key_value.aio.stores.base
   requires:
     - pip
-    - pytest >=8.4.2,<9 # maxbound: pytest versions 9 and above cause issues with the tests
+    - pytest >=8.4.2,<9  # maxbound: pytest versions 9 and above cause issues with the tests
     - pytest-asyncio >=1.2.0
     - inline-snapshot >=0.30.1
     - dirty-equals >=0.10.0
